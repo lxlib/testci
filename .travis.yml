@@ -20,7 +20,6 @@ env:
   matrix:
     - TEST_MODE=1
     - TEST_MODE=2
-
 install:
   - git clone https://github.com/openresty/lua-cjson.git
 
