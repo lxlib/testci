@@ -18,8 +18,8 @@ env:
     - JOBS=3
     - NGX_BUILD_JOBS=$JOBS
   matrix:
-    - NGINX_VERSION=1.9.15
-
+    - TEST_MODE=1
+    - TEST_MODE=2
 install:
   - git clone https://github.com/openresty/lua-cjson.git
 
