@@ -1,27 +1,45 @@
 sudo: required
-dist: trusty
-
-os: linux
-
-language: c
-
-compiler:
-  - gcc
-  - clang
-
-cache:
-  directories:
-  - download-cache
 
 env:
   global:
-    - JOBS=3
+    - JOBS=8
     - NGX_BUILD_JOBS=$JOBS
+    - LUAJIT_PREFIX=/opt/luajit21
+    - LUAJIT_LIB=$LUAJIT_PREFIX/lib
+    - LUAJIT_INC=$LUAJIT_PREFIX/include/luajit-2.1
+    - LUA_INCLUDE_DIR=$LUAJIT_INC
+    - LUA_CMODULE_DIR=/lib
+    - PCRE_VER=8.40
+    - PCRE_PREFIX=/opt/pcre
+    - PCRE_LIB=$PCRE_PREFIX/lib
+    - PCRE_INC=$PCRE_PREFIX/include
+    - OPENSSL_PREFIX=/opt/ssl
+    - OPENSSL_LIB=$OPENSSL_PREFIX/lib
+    - OPENSSL_INC=$OPENSSL_PREFIX/include
+    - LD_LIBRARY_PATH=$LUAJIT_LIB:$LD_LIBRARY_PATH
+    - TEST_NGINX_SLEEP=0.005
+    - TEST_NGINX_RANDOMIZE=1
+    - LUACHECK_VER=0.21.1
+    - OLD_OPENSSL_VER=0.9.8o
+    - CC=clang
   matrix:
-    - TEST_MODE=1
-    - TEST_MODE=2
-install:
-  - git clone https://github.com/openresty/lua-cjson.git
+    - FOO=foo1 BAR=bar1 EXIT=0
+    - FOO=foo2 BAR=bar2 EXIT=0
+    - FOO=foo3 BAR=bar3 EXIT=0
+    - FOO=foo4 BAR=bar4 EXIT=0
+    - FOO=foo5 BAR=bar5 EXIT=0
+    - FOO=foo6 BAR=bar6 EXIT=1
+
+service:
+  - memcached
+
+before_install:
+  #- git clone -b v2.1-agentzh https://github.com/openresty/luajit2.git
+  #- cd luajit2/
+  #- echo "make -j$JOBS CCDEBUG=-g Q= PREFIX=$LUAJIT_PREFIX CC=$CC XCFLAGS='-DLUA_USE_APICHECK -DLUA_USE_ASSERT -msse4.2' > build.log 2>&1 || (cat build.log && exit 1)"
+  #- time make -j$JOBS CCDEBUG=-g PREFIX=$LUAJIT_PREFIX CC=$CC XCFLAGS='-DLUA_USE_APICHECK -DLUA_USE_ASSERT -msse4.2'
+  - echo "Testing before install"
+  - echo "Testing before install"
 
 script:
-  - echo "hi"
+  - echo "FOO=$FOO, BAR=$BAR" && (exit $EXIT)
